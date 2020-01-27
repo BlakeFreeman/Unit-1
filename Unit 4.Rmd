@@ -1,0 +1,60 @@
+---
+title: "Unit 4"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+# Loading the Libraries needed. 
+```{r dependencys}
+library(XML) #xml_Parse
+library(dplyr)
+library(tidyr)
+library(stringi)
+library(rvest) #html_table, html_node
+library(ggplot2)
+library(RCurl) #getURL
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r Scrapping}
+data <-getURL("https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Frestaurants.xml")
+doc <- xmlParse(data)
+names <- xpathSApply(doc,"//name",xmlValue)
+zipcode <- xpathSApply(doc,"//zipcode",xmlValue)
+councildistrict <- xpathSApply(doc,"//councildistrict",xmlValue)
+restData = data.frame(names,zipcode,councildistrict)
+restData
+```
+```{r}
+sushi <- filter(restData, grepl("SUSHI",names))
+sushi
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+length(grep("SUSHI",restData$names))
+which(grepl("SUSHI",restData$names))
+```
+
+
+```{r}
+councildistrictData <- filter(restData, grepl("11",councildistrict))
+councildistrictData
+
+length(grep("SUSHI",councildistrictData$names))
+```
+```{r}
+restData %>% ggplot(aes(x = councildistrict, fill = factor(councildistrict))) + geom_bar(stat = "count")
+```
+
