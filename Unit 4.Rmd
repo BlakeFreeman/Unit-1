@@ -58,3 +58,47 @@ length(grep("SUSHI",councildistrictData$names))
 restData %>% ggplot(aes(x = councildistrict, fill = factor(councildistrict))) + geom_bar(stat = "count")
 ```
 
+```{r}
+
+library(wbstats)
+library(tidyverse)
+#search for reports with "gdp" in the description
+
+
+```
+```{r}
+
+library(wbstats)
+library(tidyverse)
+
+results1 = as.data.frame(wbdatacatalog())
+
+results1
+```
+
+```{r}
+Edu <-as.data.frame(wbsearch(pattern = "Education", fields = c("indicator", "indicatorDesc"), extra = FALSE))
+Edu
+
+```
+```{r}
+C_Rep <-as.data.frame(wb(indicator = "UIS.REPR.1",country = c("BE", "FI", "IE", "IT"), startdate = 2000, enddate = 2018))
+
+
+
+C_Rep1 <- transform(C_Rep, value = as.numeric(value))
+C_Rep1 <- transform(C_Rep1, date = as.numeric(date))
+
+
+sapply(C_Rep1, class)
+
+
+
+```
+```{r}
+library(ggplot2)
+
+ggplot(C_Rep1, aes(x = date, y = value, color=country)) + geom_line() + 
+  xlab('Year') + ylab('Repetition rate in primary education (%)')
+```
+
