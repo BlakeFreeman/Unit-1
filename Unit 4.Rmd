@@ -101,4 +101,22 @@ library(ggplot2)
 ggplot(C_Rep1, aes(x = date, y = value, color=country)) + geom_line() + 
   xlab('Year') + ylab('Repetition rate in primary education (%)')
 ```
+```{r}
+BE_EDU <-as.data.frame(wb(indicator = "UIS.REPR.1",country = c("BE"), startdate = 2000, enddate = 2018))
+BE_EDU1 <- transform(BE_EDU, value = as.numeric(value))
+BE_EDU1 <- transform(BE_EDU1, date = as.numeric(date))
+
+BE_GDP <-as.data.frame(wb(indicator = "NY.GDP.PCAP.KD",country = c("BE"), startdate = 2000, enddate = 2018))
+BE_GDP1 <- transform(BE_GDP, value = as.numeric(value))
+BE_GDP1 <- transform(BE_GDP1, date = as.numeric(date))
+
+BE <- merge(BE_EDU1,BE_GDP1,by="date")
+
+BE
+```
+
+```{r}
+library(ggplot2)
+ggplot(BE,aes(x = value.x, y=value.y)) + geom_point()
+```
 
